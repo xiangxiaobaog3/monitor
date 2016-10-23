@@ -93,7 +93,7 @@ def main():
             vtype = 'COUNTER'
 
         i = {
-            'metric': '%s.%s' % (metric, key),
+            'metric': '%s' % key,
             'value': value,
             'counterType': vtype
         }
