@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>内存监控</title>
+</head>
+<body>
+
+<div id="container" style="height: 400px; min-width: 310px"></div>
+
+<script src="/static/jquery.js"></script>
+<script src="/static/highstock.js"></script>
+<script>
+	$(function () {
+		Highcharts.setOptions({
+			global: {
+				useUTC: false
+			}
+		});
+    $.getJSON('/data', function (data) {
+        $('#container').highcharts('StockChart', {
+        	chart:{
+        		events:{
+        			load:function () {
+						var series = this.series[0]
+						setInterval(function () {
+							$.getJSON('/data', function (res) {
+								$.each(res,function (i,v) {
+									series.addPoint(v)
+								})
+							})
+						},3000)
+					}
+				}
+			},
+            rangeSelector : {
+                selected : 1
+            },
+            title : {
+                text : '内存使用统计'
+            },
+            series : [{
+                name : '本机内存',
+                data : data,
+                tooltip: {
+                    valueDecimals: 2
+                }
+            }]
+        });
+    });
+});
+
+</script>
+</body>
+</html>
